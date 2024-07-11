@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris-like Game</title>
+    <!-- Bootstrap CSS を読み込む -->
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <audio
+      id="bg-audio"
+      src="./tetris_original.mp3"
+      preload="auto"
+      loop
+    ></audio>
+    <audio id="scoreup-audio" src="./scoreup.mp3"></audio>
+    <audio id="hiscore-audio" src="./hiscore.mp3"></audio>
+    <div class="game-display">
+      <div id="next-mino-container"></div>
+      <div class="display-container">
+        <div id="score-display">Score: <span id="score-counter">0</span></div>
+        <div class="game-over">GAME OVER</div>
+      </div>
+      <div>
+        <div id="game-container"></div>
+        <div class="button-container d-flex justify-content-evenly pr-3 g-3">
+          <button class="btn start-btn mr-2 btn-outline-success disabled">
+            Restart
+          </button>
+          <button class="btn stop-btn btn-outline-danger">Stop</button>
+          <button type="button" class="btn btn-outline-primary newgame-btn">
+            New Game
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery を読み込む -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS を読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ゲーム用の JavaScript コードを読み込む -->
+    <script src="./tetris.js"></script>
+
+    <script>
+      let gameInterval; // Declare game interval variable
+      let isStop = false;
+      const audio = document.getElementById("bg-audio");
+
+      $(".right-aligned").removeClass("left");
+
+      const stopGame = () => {
+        clearInterval(gameInterval);
+        $(document).off("keydown");
+        isStop = true;
+      };
+
+      const startGame = () => {
+        if (isStop) {
+          gameInterval = setInterval(() => {
+            game.proc(scoreCounter);
+          }, 1000 / 60);
+          isStop = false;
+        }
+        btnHandler();
+
+        $(document).on("keydown", (event) => {
+          switch (event.key) {
+            case "ArrowLeft":
+              game.minoVx = -1;
+              break;
+            case "ArrowRight":
+              game.minoVx = 1;
+              break;
+            case "ArrowUp":
+              game.minoVr = 1;
+              break;
+            case "ArrowDown":
+              game.minoDrop = true;
+              break;
+          }
+        });
+      };
+
+      const createGame = () => {
+        let blockSize = Math.min(
+          $("#game-container").width() / 12,
+          $("#game-container").height() / 21
+        );
+        game = new Game(blockSize);
+        gameInterval = setInterval(() => {
+          game.proc(scoreCounter);
+        }, 1000 / 60);
+        setTimeout(() => {
+          $(document).trigger("moveMino");
+        }, 2000);
+        audio.currentTime = 0;
+        scoreCounter = 0;
+        $("#score-counter").text(scoreCounter);
+      };
+
+      $(".stop-btn").on("click", () => {
+        $(".stop-btn").blur();
+        audio.pause();
+        stopGame();
+        $(".game-over").css("display", "none");
+        btnHandler();
+      });
+
+      $(".start-btn").on("click", () => {
+        audio.play();
+        startGame();
+        $(".start-btn").blur();
+      });
+
+      $(".newgame-btn").on("click", () => {
+        isStop = false;
+        $(".newgame-btn").blur();
+        $(".game-over").css("display", "none");
+        $("#score-counter").css("color", "");
+        stopGame();
+        createGame();
+        stopGame();
+        startGame();
+      });
+
+      const btnHandler = () => {
+        if (isStop) {
+          $(".start-btn").removeClass("disabled");
+        } else {
+          $(".start-btn").addClass("disabled");
+        }
+      };
+
+      $(document).ready(() => {
+        const audio = document.getElementById("bg-audio");
+        createGame();
+        $(document).on("moveMino", () => {
+          audio.play().catch((error) => {
+            console.log("Audio play was prevented:", error);
+          });
+        });
+      });
+
+      window.addEventListener;
+      startGame();
+    </script>
+  </body>
+</html>

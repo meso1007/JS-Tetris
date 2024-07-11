@@ -1,0 +1,84 @@
+body,
+html {
+  height: 100%;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0000ff88;
+  overflow: hidden;
+}
+.right-aligned {
+  right: 0;
+}
+.game-display {
+  background-color: #fffffff0;
+  text-align: center;
+  padding: 8rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 5rem;
+}
+#game-container {
+  position: relative;
+  width: 300px; /* ゲームコンテナの幅 */
+  height: 525px; /* ゲームコンテナの高さ */
+  border: 1px solid #ccc;
+  background-color: #fff; /* 背景色を追加 */
+  box-sizing: border-box; /* ボーダーを含めてサイズ計算 */
+}
+#next-mino-container {
+  position: absolute;
+  top: 120px; /* Adjust positioning as needed */
+  left: 430px; /* Adjust positioning as needed */
+  width: 200px; /* Adjust width as needed */
+  height: 200px; /* Adjust height as needed */
+  background-color: #ccc; /* Background color for the container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-container {
+  position: absolute;
+  top: 40%;
+  left: -20%;
+  width: 100%;
+  height: 100%;
+  position: relative; /* Ensure the blocks are positioned relative to their container */
+}
+
+.display-container{
+  position: relative;
+  font-size: 2rem;
+}
+
+.game-over {
+  display: none;
+  color: red;
+  font-size: 1.8rem;
+  margin-top: 10px;
+}
+
+.game-container-wrapper {
+  width: 300px; /* ゲームコンテナの幅 */
+  height: 300px; /* ゲームコンテナの高さ */
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff; /* 背景色を追加 */
+  box-sizing: border-box; /* ボーダーを含めてサイズ計算 */
+}
+
+.block {
+  position: absolute;
+  background-color: #000;
+  border: 1px solid #fff;
+}
+
+.button-container {
+  margin-top: 10px;
+}
